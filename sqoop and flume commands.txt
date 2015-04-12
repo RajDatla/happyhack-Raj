@@ -1,0 +1,43 @@
+--command to import data using Sqoop
+cd /usr/lib/sqoop
+
+bin/sqoop import --connect jdbc:mysql://192.168.150.1/world --table USER_MASTER --username root -P --target-dir /user/cloudera/ev/sqoopOut1 -m 2
+
+bin/sqoop import --connect jdbc:mysql://192.168.150.1/world --table Product_Master --username root -P --target-dir /user/cloudera/ev/sqoopOut1 -m 2
+
+--to see the list of commands
+bin/sqoop help
+
+--EXPORT
+cd /usr/lib/sqoop
+
+bin/sqoop export --connect jdbc:mysql://192.168.150.1/test  --table USER_MASTER   --export-dir /user/cloudera/input/emp/ --username root -P --fields-terminated-by ','
+
+bin/sqoop export --connect jdbc:mysql://192.168.150.1/test  --table Product_Master   --export-dir /tmp/reviewfinal/ --username root -P --fields-terminated-by '\001' 
+ 
+
+
+-----------------------FLUME DEMO----------------------------
+--/* DEMO 1*/
+
+--download and copy flume-conf.properties to location /usr/lib/flume-ng/apache-flume-1.4.0-bin/conf/
+
+mkdir /home/cloudera/flumeSpool
+
+sudo su
+cp /home/cloudera/class2/flume-conf.properties /usr/lib/flume-ng/apache-flume-1.4.0-bin/conf/
+
+hadoop fs -mkdir /user/cloudera/flume/
+
+cd /usr/lib/flume-ng/apache-flume-1.4.0-bin/bin/
+
+./flume-ng agent -n agent -c conf -f /usr/lib/flume-ng/apache-flume-1.4.0-bin/conf/flume-conf.properties
+
+cp /home/cloudera/input/users_master.csv /home/cloudera/flumeSpool/
+
+cp /home/cloudera/input/products_master.csv /home/cloudera/flumeSpool/
+
+cp /home/cloudera/input/all_india_pin_code.csv /home/cloudera/flumeSpool/
+cp /home/cloudera/input/events_feed.csv /home/cloudera/flumeSpool/
+
+
